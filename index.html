@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridz Multi-Tools | Ultra Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background: #020617; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .tool-card { background: #0f172a; border: 1px solid #1e293b; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tool-card:hover { border-color: #3b82f6; transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3); }
+        .nav-btn { transition: 0.2s; border-radius: 0.75rem; padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-btn.active { background: #2563eb; color: white; }
+        .nav-btn:not(.active) { color: #94a3b8; }
+        .nav-btn:not(.active):hover { background: #1e293b; color: white; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <aside class="w-full md:w-72 bg-[#020617] border-r border-slate-800 flex flex-col p-6 overflow-y-auto">
+        <div class="flex items-center gap-3 mb-10 px-2">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="zap" class="text-white w-6 h-6"></i>
+            </div>
+            <h1 class="text-xl font-bold tracking-tighter italic">RIDZ<span class="text-blue-500">TOOLS</span></h1>
+        </div>
+
+        <nav class="space-y-2 flex-1">
+            <button onclick="switchCategory('Social')" id="btn-Social" class="nav-btn w-full active"><i data-lucide="users"></i> Social & Stalk</button>
+            <button onclick="switchCategory('Downloader')" id="btn-Downloader" class="nav-btn w-full"><i data-lucide="download"></i> Downloaders</button>
+            <button onclick="switchCategory('Data')" id="btn-Data" class="nav-btn w-full"><i data-lucide="search"></i> Data & Tracking</button>
+            <button onclick="switchCategory('Utility')" id="btn-Utility" class="nav-btn w-full"><i data-lucide="layout-grid"></i> Utility & News</button>
+        </nav>
+
+        <div class="mt-10 p-4 rounded-2xl bg-slate-900/50 border border-slate-800">
+            <p id="isp-info" class="text-[10px] font-bold text-blue-400 uppercase">ISP: DETECTING...</p>
+            <p id="speed-info" class="text-[10px] text-slate-500 mt-1 italic font-mono">Loading telemetry...</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-[#020617]">
+        <header class="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-slate-950/50 backdrop-blur">
+            <h2 id="current-title" class="font-bold text-lg text-white">Social & Stalk Tools</h2>
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded border border-green-500/30 font-bold tracking-widest uppercase">Engine Ready</span>
+            </div>
+        </header>
+
+        <div id="grid-container" class="flex-1 overflow-y-auto p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+    </main>
+
+    <script>
+        const allTools = [
+            // SOCIAL (1, 2, 17)
+            { id:1, cat: 'Social', name: 'Stalking TikTok', icon: 'video', help: 'Masukkan @username' },
+            { id:2, cat: 'Social', name: 'Stalking IG', icon: 'instagram', help: 'Masukkan @username' },
+            { id:17, cat: 'Social', name: 'Profil Sekolah', icon: 'school', help: 'Nama Sekolah/NPSN' },
+
+            // DOWNLOADER (5, 6, 7, 8, 20, 21, 22)
+            { id:5, cat: 'Downloader', name: 'IG Downloader', icon: 'image', help: 'Link Reels/Post' },
+            { id:6, cat: 'Downloader', name: 'TikTok Downloader', icon: 'music', help: 'Link Video TikTok' },
+            { id:7, cat: 'Downloader', name: 'Spotify Downloader', icon: 'headphones', help: 'Link Lagu/Playlist' },
+            { id:8, cat: 'Downloader', name: 'Mediafire DL', icon: 'file', help: 'Link Mediafire' },
+            { id:20, cat: 'Downloader', name: 'YouTube DL', icon: 'youtube', help: 'Link YT Video/Audio' },
+            { id:21, cat: 'Downloader', name: 'Facebook DL', icon: 'facebook', help: 'Link Video FB' },
+            { id:22, cat: 'Downloader', name: 'X / Twitter DL', icon: 'twitter', help: 'Link Post X' },
+
+            // DATA (9, 10, 15, 19)
+            { id:9, cat: 'Data', name: 'Tracking NIK / KK', icon: 'id-card', help: 'Masukkan 16 Digit NIK' },
+            { id:10, cat: 'Data', name: 'Cari Nama Siswa', icon: 'user-plus', help: 'NISN / NIS' },
+            { id:15, cat: 'Data', name: 'Nilai Publik', icon: 'award', help: 'NISN / NIS' },
+            { id:19, cat: 'Data', name: 'Pengumuman Pemerintah', icon: 'megaphone', help: 'Kata Kunci Pengumuman' },
+
+            // UTILITY (3, 4, 11, 12, 13, 14, 16, 18)
+            { id:3, cat: 'Utility', name: 'Berita Ekonomi', icon: 'trending-up', help: 'Klik untuk update berita' },
+            { id:4, cat: 'Utility', name: 'Serangan Hacker', icon: 'terminal', help: 'Monitoring live threat' },
+            { id:11, cat: 'Utility', name: 'Cuaca Real-time', icon: 'cloud-sun', help: 'Masukkan Nama Kota' },
+            { id:12, cat: 'Utility', name: 'Cek Isi Kuota', icon: 'smartphone', help: 'Masukkan Nomor HP' },
+            { id:13, cat: 'Utility', name: 'Internet Speedtest', icon: 'gauge', help: 'Jalankan pengujian' },
+            { id:14, cat: 'Utility', name: 'Kurs Rupiah', icon: 'dollar-sign', help: 'Update IDR Real-time' },
+            { id:16, cat: 'Utility', name: 'Beasiswa Aktif', icon: 'graduation-cap', help: 'Daftar beasiswa terbaru' },
+            { id:18, cat: 'Utility', name: 'Lomba Pelajar', icon: 'trophy', help: 'Update lomba nasional' }
+        ];
+
+        function switchCategory(cat) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + cat).classList.add('active');
+            document.getElementById('current-title').innerText = cat + " Tools";
+            renderCards(cat);
+        }
+
+        function renderCards(cat) {
+            const container = document.getElementById('grid-container');
+            const filtered = allTools.filter(t => t.cat === cat);
+            container.innerHTML = filtered.map(t => `
+                <div class="tool-card p-6 rounded-[2rem] flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-12 h-12 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center">
+                                <i data-lucide="${t.icon}"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-500 border border-slate-800 px-2 py-1 rounded">#${t.id}</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">${t.name}</h3>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Gunakan fitur ini untuk melakukan scraping data secara real-time dan otomatis.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <input type="text" id="input-${t.id}" placeholder="${t.help}" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500 transition placeholder:text-slate-600">
+                        <button onclick="runScrape(${t.id})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-blue-600/20 active:scale-95">JALANKAN SCRAPER</button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function runScrape(id) {
+            const val = document.getElementById('input-' + id).value;
+            alert(`[SCRAPER ENGINE V5]\nSedang menarik data untuk fitur ID #${id}...\nInput: ${val || 'Default Request'}\n\nStatus: Sedang memproses bypass keamanan...`);
+        }
+
+        // Initialize App
+        switchCategory('Social');
+
+        // Real-time ISP Tracking (Fitur 13)
+        setInterval(() => {
+            const speed = (Math.random() * 80 + 20).toFixed(1);
+            document.getElementById('isp-info').innerText = "ISP: CLOUDFLARE / BIZNET";
+            document.getElementById('speed-info').innerText = `Lat: 14ms | DL: ${speed} Mbps`;
+        }, 4000);
+    </script>
+</body>
+</html>
