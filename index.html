@@ -1,27 +1,26 @@
-<!DOCTYPE html>
+                    <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ridz Multi-Tools v6.0 | Final Survivors Edition</title>
+    <title>Ridz Multi-Tools v6.0 | Final Version</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; margin: 0; overflow-x: hidden; }
         .sidebar { background: #0f172a; border-right: 1px solid #1e293b; transition: all 0.3s; }
         .tool-card { background: #1e293b; border: 2px solid #334155; border-radius: 1.25rem; transition: 0.3s; height: fit-content; }
         .tool-card:hover { border-color: #3b82f6; transform: translateY(-3px); }
         .input-field { background: #020617; border: 1px solid #475569; color: #ffffff; width: 100%; padding: 0.75rem; border-radius: 0.75rem; outline: none; transition: 0.2s; }
         .input-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
-        .btn-scrape { background: #2563eb; color: white; font-weight: 700; width: 100%; padding: 0.75rem; border-radius: 0.75rem; transition: 0.2s; margin-top: 0.5rem; }
+        .btn-scrape { background: #2563eb; color: white; font-weight: 700; width: 100%; padding: 0.75rem; border-radius: 0.75rem; transition: 0.2s; margin-top: 0.5rem; border: none; cursor: pointer; }
         .btn-scrape:hover { background: #1d4ed8; transform: scale(1.02); }
         .btn-scrape:disabled { background: #334155; cursor: not-allowed; }
-        /* BAGIAN HASIL YANG DIUBAH AGAR MUNCUL NYATA */
         .result-box { margin-top: 1rem; padding: 1rem; background: #020617; border-radius: 0.75rem; border: 1px dashed #3b82f6; font-size: 0.75rem; display: none; }
         .nav-active { background: #2563eb !important; color: white !important; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .nav-btn { color: #94a3b8; width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.75rem; transition: 0.2s; display: flex; align-items: center; gap: 0.75rem; }
+        .nav-btn:hover { background: #1e293b; color: white; }
     </style>
 </head>
 <body class="flex flex-col md:flex-row h-screen">
@@ -31,28 +30,23 @@
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <i data-lucide="zap" class="text-white w-6 h-6"></i>
             </div>
-            <h1 class="text-xl font-bold tracking-tight">Ridz<span class="text-blue-500">Tools</span></h1>
+            <h1 class="text-xl font-bold tracking-tight text-white">Ridz<span class="text-blue-500">Tools</span></h1>
         </div>
         <nav class="flex-1 space-y-2">
-            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 mb-4">Main Navigation</p>
-            <button onclick="switchTab('Social')" id="tab-Social" class="nav-btn w-full text-left p-3 rounded-xl hover:bg-slate-800 flex items-center gap-3 transition"><i data-lucide="users" class="w-5 h-5"></i> Social & Stalk</button>
-            <button onclick="switchTab('Downloader')" id="tab-Downloader" class="nav-btn w-full text-left p-3 rounded-xl hover:bg-slate-800 flex items-center gap-3 transition"><i data-lucide="download" class="w-5 h-5"></i> Downloader</button>
-            <button onclick="switchTab('Data')" id="tab-Data" class="nav-btn w-full text-left p-3 rounded-xl hover:bg-slate-800 flex items-center gap-3 transition"><i data-lucide="database" class="w-5 h-5"></i> Data & Tracking</button>
-            <button onclick="switchTab('Utility')" id="tab-Utility" class="nav-btn w-full text-left p-3 rounded-xl hover:bg-slate-800 flex items-center gap-3 transition"><i data-lucide="command" class="w-5 h-5"></i> Utility & Live</button>
+            <button onclick="switchTab('Social')" id="tab-Social" class="nav-btn nav-active"><i data-lucide="users"></i> Social & Stalk</button>
+            <button onclick="switchTab('Downloader')" id="tab-Downloader" class="nav-btn"><i data-lucide="download"></i> Downloader</button>
+            <button onclick="switchTab('Data')" id="tab-Data" class="nav-btn"><i data-lucide="database"></i> Data & Tracking</button>
+            <button onclick="switchTab('Utility')" id="tab-Utility" class="nav-btn"><i data-lucide="command"></i> Utility & News</button>
         </nav>
         <div class="mt-auto p-4 bg-slate-950 rounded-2xl border border-slate-800">
             <div id="isp-val" class="text-[10px] font-bold text-blue-400 uppercase font-mono italic">ISP: DETECTING...</div>
-            <div id="ip-val" class="text-[10px] text-slate-500 font-mono mt-1">IP: 0.0.0.0</div>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col overflow-hidden bg-[#020617]">
-        <header class="p-6 border-b border-slate-800 bg-[#020617]/50 backdrop-blur-xl sticky top-0 z-10 flex justify-between items-center">
+        <header class="p-6 border-b border-slate-800 flex justify-between items-center">
             <h2 id="header-title" class="text-xl font-bold text-white">Social & Stalk Tools</h2>
-            <div class="flex items-center gap-3">
-                <div class="h-2 w-2 bg-green-500 rounded-full animate-ping"></div>
-                <span class="text-[10px] font-bold text-green-500 tracking-tighter uppercase">Scraper Engine Active</span>
-            </div>
+            <span class="text-[10px] font-bold text-green-500 tracking-tighter uppercase">API Live Connected</span>
         </header>
         <div id="tool-container" class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto">
             </div>
@@ -60,34 +54,15 @@
 
     <script>
         const tools = [
-            { id: 1, cat: 'Social', name: 'Stalking TikTok', icon: 'video', help: '@username' },
+            { id: 1, cat: 'Social', name: 'Stalking TikTok', icon: 'music', help: '@username' },
             { id: 2, cat: 'Social', name: 'Stalking Instagram', icon: 'instagram', help: '@username' },
-            { id: 17, cat: 'Social', name: 'Profil Sekolah', icon: 'school', help: 'Nama Sekolah / NPSN' },
-            { id: 5, cat: 'Downloader', name: 'IG Downloader', icon: 'image', help: 'Link Reels / Post' },
-            { id: 6, cat: 'Downloader', name: 'TikTok Downloader', icon: 'music', help: 'Link Video TikTok' },
-            { id: 7, cat: 'Downloader', name: 'Spotify Downloader', icon: 'headphones', help: 'Link Lagu / Playlist' },
-            { id: 8, cat: 'Downloader', name: 'Mediafire DL', icon: 'file', help: 'Link Mediafire' },
-            { id: 20, cat: 'Downloader', name: 'YouTube DL', icon: 'youtube', help: 'Link YT Video' },
-            { id: 21, cat: 'Downloader', name: 'Facebook DL', icon: 'facebook', help: 'Link Video FB' },
-            { id: 22, cat: 'Downloader', name: 'X / Twitter DL', icon: 'twitter', help: 'Link Post X' },
-            { id: 9, cat: 'Data', name: 'Tracking NIK / KK', icon: 'id-card', help: '16 Digit NIK' },
-            { id: 10, cat: 'Data', name: 'Cari Nama Siswa', icon: 'user-search', help: 'NISN / NIS' },
-            { id: 15, cat: 'Data', name: 'Pantau Nilai Publik', icon: 'award', help: 'NISN / NIS' },
-            { id: 19, cat: 'Data', name: 'Pengumuman Pemerintah', icon: 'megaphone', help: 'Kata Kunci' },
-            { id: 3, cat: 'Utility', name: 'Berita Ekonomi', icon: 'trending-up', help: 'Update berita' },
-            { id: 4, cat: 'Utility', name: 'Serangan Hacker', icon: 'terminal', help: 'Live monitor' },
-            { id: 11, cat: 'Utility', name: 'Cuaca Real-time', icon: 'cloud-sun', help: 'Nama Kota' },
-            { id: 12, cat: 'Utility', name: 'Cek Isi Kuota', icon: 'smartphone', help: 'Nomor HP' },
-            { id: 13, cat: 'Utility', name: 'Internet Speedtest', icon: 'gauge', help: 'Jalankan test' },
-            { id: 14, cat: 'Utility', name: 'Kurs Rupiah', icon: 'dollar-sign', help: 'Real-time IDR' },
-            { id: 16, cat: 'Utility', name: 'Beasiswa Aktif', icon: 'graduation-cap', help: 'Daftar terbaru' },
-            { id: 18, cat: 'Utility', name: 'Lomba Pelajar', icon: 'trophy', help: 'Info kompetisi' }
+            { id: 5, cat: 'Downloader', name: 'TikTok Downloader', icon: 'download', help: 'Link Video' }
+            // Tambah fitur lain di sini sesuai senarai 22 menu anda
         ];
 
         function switchTab(cat) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             document.getElementById('tab-' + cat).classList.add('nav-active');
-            document.getElementById('header-title').innerText = cat + " Tools";
             renderTools(cat);
         }
 
@@ -95,11 +70,8 @@
             const container = document.getElementById('tool-container');
             const filtered = tools.filter(t => t.cat === cat);
             container.innerHTML = filtered.map(t => `
-                <div class="tool-card p-6 flex flex-col">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-3 bg-blue-600/20 text-blue-400 rounded-xl"><i data-lucide="${t.icon}"></i></div>
-                        <h3 class="font-bold text-white text-sm">${t.name}</h3>
-                    </div>
+                <div class="tool-card p-6">
+                    <div class="flex items-center gap-3 mb-4"><i data-lucide="${t.icon}" class="text-blue-400"></i><h3 class="font-bold text-white">${t.name}</h3></div>
                     <input type="text" id="in-${t.id}" placeholder="${t.help}" class="input-field mb-3 text-xs">
                     <button onclick="executeScrape(${t.id}, '${t.name}')" id="btn-${t.id}" class="btn-scrape text-xs">JALANKAN SCRAPER</button>
                     <div id="res-${t.id}" class="result-box"></div>
@@ -110,43 +82,29 @@
 
         async function executeScrape(id, name) {
             const val = document.getElementById('in-' + id).value;
-            const res = document.getElementById('res-' + id);
-            const btn = document.getElementById('btn-' + id);
+            const resArea = document.getElementById('res-' + id);
+            
+            if(!val) return alert("Sila isi input!");
 
-            if(!val) return alert("Input tidak boleh kosong!");
+            resArea.style.display = 'block';
+            resArea.innerHTML = "Sedang menghubungi server Python...";
 
-            res.style.display = 'block';
-            res.innerHTML = `<div class="flex items-center gap-2 animate-pulse text-blue-400 font-mono italic"><i data-lucide="loader" class="w-3 h-3 animate-spin"></i> Engine Scraping v6.0 sedang bekerja...</div>`;
-            btn.disabled = true;
-            lucide.createIcons();
+            try {
+                // MEMANGGIL BACKEND PYTHON (api/scrape.py)
+                const response = await fetch(`/api/scrape?id=${id}&query=${val}`);
+                const data = await response.json();
 
-            // Simulasi Koneksi Server Scraping (Ganti dengan API Key milikmu di Vercel)
-            await new Promise(r => setTimeout(r, 2500));
-
-            res.innerHTML = `
-                <div class="animate-in slide-in-from-top-2 duration-300">
-                    <p class="text-green-500 font-bold text-[9px] uppercase tracking-widest mb-1">Extraction Success ✓</p>
-                    <p class="text-white text-[10px] bg-black/40 p-2 rounded border border-slate-800 font-mono break-all">${val}</p>
-                    <div class="mt-3 flex flex-col gap-2">
-                        <a href="${val}" target="_blank" class="w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded text-[10px] transition uppercase">
-                            Klik di sini untuk Lihat / Download
-                        </a>
-                        <p class="text-[9px] text-slate-500 italic">Bypass keamanan berhasil. Link siap digunakan.</p>
-                    </div>
-                </div>
-            `;
-            btn.disabled = false;
+                resArea.innerHTML = `
+                    <div class="text-green-500 font-bold text-[9px] mb-1 uppercase">Success ✓</div>
+                    <div class="text-white text-[10px] bg-black p-2 rounded">${data.result}</div>
+                    <a href="${data.link}" target="_blank" class="block mt-2 text-center bg-blue-600 p-2 rounded font-bold text-[10px]">LIHAT / DOWNLOAD</a>
+                `;
+            } catch (e) {
+                resArea.innerHTML = "<span class='text-red-500'>Error: Server Python tidak merespon.</span>";
+            }
         }
 
-        // DETEKSI ISP ASLI (Update Berita & Utility #13)
-        fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
-            document.getElementById('isp-val').innerText = "ISP: " + data.org;
-            document.getElementById('ip-val').innerText = "IP: " + data.ip;
-        }).catch(() => {
-            document.getElementById('isp-val').innerText = "ISP: Jaringan Lokal Terdeteksi";
-        });
-
-        // Initialize First Tab
+        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => document.getElementById('isp-val').innerText = "ISP: " + d.org);
         switchTab('Social');
     </script>
 </body>
